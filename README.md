@@ -1,24 +1,8 @@
-# duediligence
+# DueDiligence
+A set of tools to track stocks and information to have better DD(Due diligence), along with some extras.
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## To-do
+* Pick from a list of stocks and visualizate it in some tob nav-bar.
+* Compare the choosen stocks in some form (to be decided).
+* Show the user a feed of information from various user pick sources.
+* Dividend calculator based on a PIE (how much money would you need to invest for x $$$ a month).
