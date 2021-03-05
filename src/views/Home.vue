@@ -1,5 +1,17 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <div>
+    {{getPortfolio.length}}
+  </div> 
 </template>
+
+<script>
+import {mapGetters} from 'vuex'
+export default {
+  name: 'Home',
+  computed: mapGetters(['getPortfolio'])
+}
+</script>
+
+<style>
+
+</style>

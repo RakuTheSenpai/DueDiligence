@@ -1,8 +1,8 @@
 <template>
     <div>
-        <SearchBar v-on:search-result="updateItems"/>
-        <div v-bind:key ="item['1. symbol']" v-for="item in items">
-            <SearchItem v-bind:data="item"/>
+        <SearchBar v-on:updateItems="updateItems"/>
+        <div class="search-results">
+            <SearchItem v-bind:key ="ticker.symbol" v-for="ticker in tickers" v-bind:stock="ticker"/>
         </div>
     </div>
 </template>
@@ -10,25 +10,38 @@
 <script>
 import SearchBar from '../components/SearchBar'
 import SearchItem from '../components/SearchItem'
+import {mapGetters} from 'vuex'
 export default {
     name: 'Search',
+    data(){
+        return{
+            tickers: []
+        }
+    },
     components: {
         SearchBar,
         SearchItem
     },
     methods:{
-        updateItems(items){
-            this.items = items
+        filterTickers(key){
+            this.tickers = this.getTickers.filter(ticker=>ticker.symbol.includes(key))
+        },
+        updateItems(key){
+            this.filterTickers(key)
         }
     },
-    data(){
-        return {
-            items:[]
-        }
+    computed: mapGetters(['getTickers', 'getPortfolio']),
+    created(){
+        console.log(this.getPortfolio)
     }
 }
 </script>
 
-<style>
-
+<style scoped>
+    .search-results{
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        padding: 5%;
+    }
 </style>

@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
     name: "SearchBar",
     data(){
@@ -19,11 +18,7 @@ export default {
     methods:{
         searchForStock(e){
             e.preventDefault()
-            axios.get('https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords='+this.stock+'&apikey='+process.env.API_KEY).then(
-                res=>this.$emit('search-result', res.data.bestMatches)
-            ).catch(
-                err=>console.log(err)
-            )
+            this.$emit('updateItems',this.stock)
         }
     }
 }

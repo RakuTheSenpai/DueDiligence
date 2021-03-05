@@ -7,7 +7,18 @@
     <router-view/>
   </div>
 </template>
-
+<script>
+import {mapActions} from 'vuex'
+export default {
+  name: 'App',
+  methods:{
+    ...mapActions(['fetchTickers'])
+  },
+  created(){
+    this.fetchTickers()
+  }
+}
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
