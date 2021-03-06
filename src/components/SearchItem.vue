@@ -18,7 +18,7 @@
 import {mapActions, mapGetters} from 'vuex'
 export default {
     name: 'SearchItem',
-    props: ["stock"],
+    props: ['stock'],
     computed: mapGetters(['getPortfolio']),
     data(){
       return {
@@ -37,6 +37,10 @@ export default {
         this.isInPortfolio = false
         this.$forceUpdate()
       }
+    },
+    created(){
+      const result = this.getPortfolio.find(ticker => ticker.symbol === this.stock.symbol)
+      this.isInPortfolio = result !== undefined
     }
 }
 </script>

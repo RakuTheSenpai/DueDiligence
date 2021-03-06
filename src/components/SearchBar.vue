@@ -1,8 +1,8 @@
 <template>
   <div>
       <form @submit="searchForStock">
-          <input v-model ="stock" type="text" name ="stock" placeholder="Search for a stock">
-          <input type ="submit" class ="btn" value="Search">
+          <input v-model ="stock" type="text" name ="stock" placeholder="Search for a stock" autocomplete="off">
+          <input type ="submit" class ="btn" value="Search" :disabled="!stock">
       </form>
   </div>
 </template>
@@ -18,7 +18,7 @@ export default {
     methods:{
         searchForStock(e){
             e.preventDefault()
-            this.$emit('updateItems',this.stock)
+            this.$emit('updateItems',this.stock.toUpperCase())
         }
     }
 }

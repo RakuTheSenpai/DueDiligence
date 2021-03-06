@@ -25,6 +25,23 @@ const actions = {
         let portfolio = state.portfolio
         portfolio = portfolio.filter(ticker => ticker.symbol !== stock.symbol)
         commit('setPortfolio', portfolio)
+    },
+    async quotePortfolio({commit}){
+        let portfolio = state.portfolio
+        await Promise.all([
+            portfolio.forEach(stock=>{
+                axios.get('https://finnhub.io/api/v1/quote?symbol='+stock.symbol+'&token='+process.env.VUE_APP_API_KEY).then(
+                    res=>{
+                        stock.price = res.data.c
+                        stock.close_price = res.data.pc
+                    }
+                ).catch(
+                    err=>err.console.log(err)
+                )
+            })
+        ]).then(
+            commit('setPortfolio', portfolio)
+        )
     }
 }
 

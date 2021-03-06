@@ -24,16 +24,13 @@ export default {
     },
     methods:{
         filterTickers(key){
-            this.tickers = this.getTickers.filter(ticker=>ticker.symbol.includes(key))
+            this.tickers = this.getTickers.filter(ticker=>ticker.symbol.includes(key)||ticker.description.includes(key))
         },
         updateItems(key){
             this.filterTickers(key)
         }
     },
     computed: mapGetters(['getTickers', 'getPortfolio']),
-    created(){
-        console.log(this.getPortfolio)
-    }
 }
 </script>
 
