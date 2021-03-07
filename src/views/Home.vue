@@ -24,11 +24,8 @@ export default {
   components: {
     StockItem
   },
-  async created(){
-    console.log(this.getPortfolio)
-    this.quotePortfolio().then(
-      this.$forceUpdate()
-    )
+  created(){
+    this.quotePortfolio()
   }
 }
 </script>

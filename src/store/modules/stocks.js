@@ -11,7 +11,13 @@ const getters = {
 const actions = {
     async fetchTickers({commit}){
         axios.get('https://finnhub.io/api/v1/stock/symbol?exchange=US&token='+process.env.VUE_APP_API_KEY).then(
-                res=> commit('setTickers', res.data)
+                res=> {
+                    res.data.forEach(ticker => {
+                        ticker.price = 0
+                        ticker.close_price = 0
+                    })
+                    commit('setTickers', res.data)
+                }
             ).catch(
                 err=>console.log(err)
             )
@@ -26,21 +32,27 @@ const actions = {
         portfolio = portfolio.filter(ticker => ticker.symbol !== stock.symbol)
         commit('setPortfolio', portfolio)
     },
-    async quotePortfolio({commit}){
-        let portfolio = state.portfolio
-        await Promise.all([
-            portfolio.forEach(stock=>{
-                axios.get('https://finnhub.io/api/v1/quote?symbol='+stock.symbol+'&token='+process.env.VUE_APP_API_KEY).then(
-                    res=>{
-                        stock.price = res.data.c
-                        stock.close_price = res.data.pc
+    quotePortfolio({commit}){
+        console.log(commit)
+        const promises = []
+        state.portfolio.forEach(stock=>promises.push(
+            axios.get('https://finnhub.io/api/v1/quote?symbol='+stock.symbol+'&token='+process.env.VUE_APP_API_KEY).then(
+                    res => {
+                        return {stock, data:res.data}
                     }
-                ).catch(
-                    err=>err.console.log(err)
-                )
-            })
-        ]).then(
-            commit('setPortfolio', portfolio)
+            )))
+        let portfolio = []
+        Promise.all(promises).then(
+            res=>{
+                res.forEach(value=>{
+                    let stock = value.stock
+                    let data = value.data
+                    stock.price = data.c
+                    stock.close_price = data.pc
+                    portfolio.push(stock)
+                })
+                commit('setPortfolio', portfolio)
+            }
         )
     }
 }
