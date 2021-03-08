@@ -2,18 +2,25 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Search from '../views/Search'
+import Company from '../views/Company'
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home,
   },
   {
     path: '/search',
-    name: 'Search',
+    name: 'search',
     component: Search
+  },
+  {
+    path: '/company',
+    name: 'company',
+    component: Company,
+    props: true 
   }
 ]
 

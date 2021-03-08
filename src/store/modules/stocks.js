@@ -10,7 +10,7 @@ const getters = {
 
 const actions = {
     async fetchTickers({commit}){
-        axios.get('https://finnhub.io/api/v1/stock/symbol?exchange=US&token='+process.env.VUE_APP_API_KEY).then(
+        axios.get('https://finnhub.io/api/v1/stock/symbol?exchange=US&token='+process.env.VUE_APP_FINNHUB).then(
                 res=> {
                     res.data.forEach(ticker => {
                         ticker.price = 0
@@ -36,7 +36,7 @@ const actions = {
         console.log(commit)
         const promises = []
         state.portfolio.forEach(stock=>promises.push(
-            axios.get('https://finnhub.io/api/v1/quote?symbol='+stock.symbol+'&token='+process.env.VUE_APP_API_KEY).then(
+            axios.get('https://finnhub.io/api/v1/quote?symbol='+stock.symbol+'&token='+process.env.VUE_APP_FINNHUB).then(
                     res => {
                         return {stock, data:res.data}
                     }

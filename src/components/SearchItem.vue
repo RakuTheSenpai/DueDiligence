@@ -9,7 +9,7 @@
            @click="handleAddToPortfolio" v-if="!isInPortfolio">
       <img src="../assets/remove_circle_outline-24px.svg" class="icon" 
            @click="handleRemoveFromPortfolio" v-if="isInPortfolio" >
-      <img src="../assets/help_outline-24px.svg" class="icon">
+      <router-link :to="{name:'company', params:{'id': stock.symbol}}" class="icon" ><img src="../assets/help_outline-24px.svg" class="link-icon"></router-link>
     </div>
   </div>
 </template>
@@ -70,6 +70,10 @@ export default {
   .icon{
     width:50%;
     height: 50%;
+  }
+  .link-icon{
+    width:100%;
+    height: 100%;
   }
 
 </style>
