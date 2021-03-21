@@ -1,12 +1,13 @@
 <template>
-  <div>
+  <div class="home">
     <h1>Your portfolio</h1>
     <div v-if="getPortfolio.length > 0">
-      <StockItem v-for="stock in getPortfolio" :key="stock.symbol" v-bind:stock ="stock"/>
+      <StockView v-bind:stocks="getPortfolio"/>
       <h1>Here's how your stock has performed lately</h1>
-      <line-chart v-if="loaded" :chart-data= 'line' :options="options"/>
+      <h2 v-if="alpha_limit">Sorry the API were are using has a pretty low limit! </h2>
+      <line-chart class = "chart" v-if="loaded" :chart-data= 'line' :options="options"/>
       <h1>The latest talk on your portfolio</h1>
-      <NewsBlock v-for="(piece, index) in filtered" :key="index" v-bind:news="piece"/>
+      <NewsView v-bind:pieces="filtered"/>
     </div>
     <p v-if="getPortfolio.length == 0">You have no stocks in your portfolio yet!</p>
   </div> 
@@ -14,8 +15,8 @@
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
-import StockItem from '../components/StockItem'
-import NewsBlock from '../components/NewsBlock'
+import StockView from '../components/StockView'
+import NewsView from '../components/NewsView'
 import LineChart from '../components/LineChart'
 import axios from 'axios'
 export default {
@@ -27,6 +28,7 @@ export default {
       filtered: [],
       line: null,
       loaded: false,
+      alpha_limit: false,
       dates:'',
       options: {
         scales: {
@@ -35,7 +37,8 @@ export default {
                   beginAtZero: true
               }
           }]
-        }
+        },
+        maintainAspectRatio: false
       }
     }
   },
@@ -90,32 +93,43 @@ export default {
       }
       Promise.all(promises).then(
         res=> {
+          if(res[0].res.data.Note != null){
+            this.alpha_limit = true
+          }else{
+            this.alpha_limit = false
+          }
           let lbls = res[0].res.data['Time Series (Daily)']
           Object.keys(lbls).forEach(date=>{
             this.line.labels.push(date)
           })
+          if(this.line != null){
+            this.line.labels.reverse()
+          }
           res.forEach(stock=>{
             let subset = {
               label:stock.symbol,
-              backgroundColor: '#' + Math.floor(Math.random()*16777215).toString(16),
-              fillOpacity: .3, 
+              borderColor: '#' + Math.floor(Math.random()*16777215).toString(16),
+              fill: false,
               data: []
             } 
             let data = stock.res.data['Time Series (Daily)']
             Object.keys(data).forEach(date=>{
               subset.data.push(data[date]['4. close'])
             })
+            subset.data.reverse()
             this.line.datasets.push(subset)
           })
         } 
+      ).catch(
+        err => console.log(err)
       ).then(
         ()=> this.loaded = true
       )
     }
   },
   components: {
-    StockItem,
-    NewsBlock,
+    StockView,
+    NewsView,
     LineChart
   },
   created(){
@@ -128,10 +142,11 @@ export default {
 </script>
 
 <style scoped>
-.stock-container{
+.home{
   display: flex;
-  flex-direction: colum;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 10%;
+  margin-right:10%;
 }
 </style>

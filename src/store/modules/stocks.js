@@ -23,6 +23,7 @@ const actions = {
             )
     },
     addToPortfolio({commit}, stock){
+        stock.shares = 1
         let portfolio = state.portfolio
         portfolio = [...portfolio, stock]
         commit('setPortfolio', portfolio)
@@ -33,7 +34,6 @@ const actions = {
         commit('setPortfolio', portfolio)
     },
     quotePortfolio({commit}){
-        console.log(commit)
         const promises = []
         state.portfolio.forEach(stock=>promises.push(
             axios.get('https://finnhub.io/api/v1/quote?symbol='+stock.symbol+'&token='+process.env.VUE_APP_FINNHUB).then(
